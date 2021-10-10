@@ -9,9 +9,11 @@ namespace StatisticsMicroservice.Repository
     public interface IStatisticsRepository
     {
         IEnumerable<FoodCollectionDate> GetFoodCollections();
-        FoodCollectionDate GetFoodCollectionByID(string CollectionId);
-        void InsertFoodCollection(FoodCollectionDate foodCollectionDate);
-        void UpdateFoodCollection(FoodCollectionDate foodCollectionDate);
-        void Save();
+
+        IEnumerable<DonorsDto> GetDonorLeaderboard();
+
+        IEnumerable<CollectorsDto> GetCollectorLeaderboard();
+
+        IEnumerable<LocationsDto> GetLocationLeaderboard();
     }
 }

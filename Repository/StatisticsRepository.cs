@@ -16,31 +16,64 @@ namespace StatisticsMicroservice.Repository
             _dbContext = dbContext;
         }
 
-        public FoodCollectionDate GetFoodCollectionByID(string CollectionId)
-        {
-            return _dbContext.FoodCollectionDates.Find(CollectionId);
-        }
-
         public IEnumerable<FoodCollectionDate> GetFoodCollections()
         {
             return _dbContext.FoodCollectionDates.ToList();
         }
 
-        public void InsertFoodCollection(FoodCollectionDate foodCollectionDate)
+        public IEnumerable<DonorsDto> GetDonorLeaderboard()
         {
-            _dbContext.Add(foodCollectionDate);
-            Save();
+            var foodDonationList = _dbContext.Donations.ToList();
+
+            var donorsTotal = foodDonationList.GroupBy(n => n.CreatedBy)
+                                               .Select(n => new DonorsDto
+                                               {
+                                                   DonorName = n.Key,
+                                                   TotalDonationCount = n.Count()
+                                               })
+                                               .OrderByDescending(n => n.TotalDonationCount);
+
+            return donorsTotal;
         }
 
-        public void Save()
+        public IEnumerable<CollectorsDto> GetCollectorLeaderboard()
         {
-            _dbContext.SaveChanges();
+            var foodCollectionList = _dbContext.FoodCollectionDates.ToList();
+
+            var collectorsTotal = foodCollectionList.GroupBy(n => n.CollectionName)
+                                                    .Select(n => new CollectorsDto
+                                                    {
+                                                        CollectorName = n.Key,
+                                                        TotalCollectionCount = n.Count()
+                                                    })
+                                                    .OrderByDescending(n => n.TotalCollectionCount);
+            return collectorsTotal;
         }
 
-        public void UpdateFoodCollection(FoodCollectionDate foodCollectionDate)
+        public IEnumerable<LocationsDto> GetLocationLeaderboard()
         {
-            _dbContext.Entry(foodCollectionDate).State = EntityState.Modified;
-            Save();
+            var collectionList = (from fc in _dbContext.FoodCollectionDates
+                                 join lc in _dbContext.Locations on fc.LocationId equals lc.LocationId
+                                 into t
+                                 from rt in t.DefaultIfEmpty()
+                                 orderby fc.LocationId
+                                 select new
+                                 {
+                                     fc.CollectionId,
+                                     fc.LocationId,
+                                     rt.LocationName,
+                                 }).ToList();
+
+
+            var locationTotal = collectionList.GroupBy(n => n.LocationName)
+                                                    .Select(n => new LocationsDto
+                                                    {
+                                                        LocationName = n.Key,
+                                                        TotalLocationCount = n.Count()
+                                                    })
+                                                    .OrderByDescending(n => n.TotalLocationCount);
+
+            return locationTotal;
         }
     }
 }

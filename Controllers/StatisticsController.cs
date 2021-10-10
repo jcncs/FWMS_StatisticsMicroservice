@@ -29,37 +29,25 @@ namespace StatisticsMicroservice.Controller
             return new OkObjectResult(foodCollection);
         }
 
-        [HttpGet("{collectionId}", Name = "Get")]
-        public IActionResult Get(string collectionId)
+        [HttpGet("GetDonorLeaderboard")]
+        public IActionResult GetDonorLeaderboard()
         {
-            var foodCollection = _statisticsRepository.GetFoodCollectionByID(collectionId);
-            return new OkObjectResult(foodCollection);
+            var donors = _statisticsRepository.GetDonorLeaderboard();
+            return new OkObjectResult(donors);
         }
 
-        [HttpPost]
-        public IActionResult Post([FromBody] FoodCollectionDate foodCollection)
+        [HttpGet("GetCollectorLeaderboard")]
+        public IActionResult GetCollectorLeaderboard()
         {
-            using (var scope = new TransactionScope())
-            {
-                _statisticsRepository.InsertFoodCollection(foodCollection);
-                scope.Complete();
-                return CreatedAtAction(nameof(Get), new { id = foodCollection.CollectionId }, foodCollection);
-            }
+            var collectors = _statisticsRepository.GetCollectorLeaderboard();
+            return new OkObjectResult(collectors);
         }
 
-        [HttpPut]
-        public IActionResult Put([FromBody] FoodCollectionDate foodCollection)
+        [HttpGet("GetLocationLeaderboard")]
+        public IActionResult GetLocationLeaderboard()
         {
-            if (foodCollection != null)
-            {
-                using (var scope = new TransactionScope())
-                {
-                    _statisticsRepository.UpdateFoodCollection(foodCollection);
-                    scope.Complete();
-                    return new OkResult();
-                }
-            }
-            return new NoContentResult();
+            var locations = _statisticsRepository.GetLocationLeaderboard();
+            return new OkObjectResult(locations);
         }
 
     }

@@ -15,6 +15,8 @@ namespace StatisticsMicroservice.DBContexts
         {
         }
         public DbSet<FoodCollectionDate> FoodCollectionDates { get; set; }
+
+        public DbSet<FoodDonations> Donations { get; set; }
         public DbSet<FoodDescription> FoodDescriptions { get; set; }
         public DbSet<Location> Locations { get; set; }
 
