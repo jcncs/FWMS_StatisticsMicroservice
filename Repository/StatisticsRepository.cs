@@ -52,15 +52,15 @@ namespace StatisticsMicroservice.Repository
 
         public IEnumerable<LocationsDto> GetLocationLeaderboard()
         {
-            var collectionList = (from fc in _dbContext.FoodCollectionDates
-                                 join lc in _dbContext.Locations on fc.LocationId equals lc.LocationId
+            var collectionList = (from fd in _dbContext.Donations
+                                 join lc in _dbContext.Locations on fd.LocationId equals lc.LocationId
                                  into t
                                  from rt in t.DefaultIfEmpty()
-                                 orderby fc.LocationId
+                                 orderby fd.LocationId
                                  select new
                                  {
-                                     fc.CollectionId,
-                                     fc.LocationId,
+                                     fd.DonationId,
+                                     fd.LocationId,
                                      rt.LocationName,
                                  }).ToList();
 

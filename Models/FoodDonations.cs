@@ -20,5 +20,6 @@ namespace StatisticsMicroservice.Models
         public DateTime ReservedDate { get; set; }
         public string CollectionId { get; set; }
         public string FoodEntryId { get; set; }
+        public string LocationId { get; set; }
     }
 }

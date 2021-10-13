@@ -13,6 +13,5 @@ namespace StatisticsMicroservice.Models
         public string CollectionName { get; set; }
         public DateTime CollectionDate { get; set; }
         public string DonationId { get; set; }
-        public string LocationId { get; set; }
     }
 }
